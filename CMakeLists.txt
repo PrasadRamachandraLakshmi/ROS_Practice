@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -47,18 +48,20 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
+add_message_files(
+FILES
 #   Message1.msg
 #   Message2.msg
-# )
+Shape.msg
+)
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
+add_service_files(
+  FILES
 #   Service1.srv
 #   Service2.srv
-# )
+  DivideTwoInts.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -68,10 +71,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -103,10 +106,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES ros_basics_tutorials
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
+ INCLUDE_DIRS include
+ LIBRARIES ros_basics_tutorials
+ CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+ #DEPENDS system_lib
 )
 
 ###########
@@ -206,13 +209,36 @@ include_directories(
 # catkin_add_nosetests(test)
 
 #talker
-add_executable(talker_ros_node src/talker.cpp)
+add_executable(talker_ros_node src/talker_listener/talker.cpp)
 target_link_libraries (talker_ros_node ${catkin_LIBRARIES})
 
 #listener
-add_executable(listener_ros_node src/listener.cpp)
+add_executable(listener_ros_node src/talker_listener/listener.cpp)
 target_link_libraries(listener_ros_node ${catkin_LIBRARIES})
 
 #robot_move
 add_executable(robot_move src/assignment/robot_move.cpp)
 target_link_libraries(robot_move ${catkin_LIBRARIES})
+
+#shape_publisher
+add_executable(shape_publisher src/shape/shape_publisher.cpp)
+target_link_libraries(shape_publisher ${catkin_LIBRARIES})
+
+#shape_subscriber
+add_executable(shape_subscriber src/shape/shape_subscriber.cpp)
+target_link_libraries(shape_subscriber ${catkin_LIBRARIES})
+
+#divide_server
+add_executable(divide_two_ints_server src/service/divide_server.cpp)
+target_link_libraries(divide_two_ints_server ${catkin_LIBRARIES})
+
+#divide_server
+add_executable(divide_two_ints_client src/service/divide_client.cpp)
+target_link_libraries(divide_two_ints_client ${catkin_LIBRARIES})
+
+#OpenCV in C++
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
+add_executable(cpp_read_video src/perception/read_video.cpp)
+target_link_libraries(cpp_read_video ${catkin_LIBRARIES})
+target_link_libraries(cpp_read_video ${OpenCV_LIBRARIES})

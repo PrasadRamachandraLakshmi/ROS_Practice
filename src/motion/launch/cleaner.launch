@@ -1,0 +1,9 @@
+<launch>
+    <param name="speed" value="1.0"/>
+    <param name="distance" value="4.0"/>
+    <param name="rotation_speed" value="30"/>
+    <param name="rotation_angle" value="90"/>
+    <param name="is_forward" value="True"/>
+    <node name="turtlesim" pkg="turtlesim" type="turtlesim_node" />
+    <node name="cleaner_bot" pkg="ros_basics_tutorials" type="turtle_cleaner.py" />
+</launch>
