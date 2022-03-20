@@ -236,6 +236,17 @@ target_link_libraries(divide_two_ints_server ${catkin_LIBRARIES})
 add_executable(divide_two_ints_client src/service/divide_client.cpp)
 target_link_libraries(divide_two_ints_client ${catkin_LIBRARIES})
 
+#LaserScan
+add_library(laserscanner_lib src/perception/laserscan/LaserScanner.cpp)
+target_link_libraries(laserscanner_lib ${catkin_LIBRARIES})
+add_dependencies(laserscanner_lib ${catkin_EXPORTED_TARGETS})
+target_link_libraries(laserscanner_lib utility_lib)
+
+#tb3_move
+add_executable(tb3_move src/perception/move_tb3.cpp)
+target_link_libraries(tb3_move ${catkin_LIBRARIES})
+target_link_libraries(tb3_move laserscanner_lib)
+
 #OpenCV in C++
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
